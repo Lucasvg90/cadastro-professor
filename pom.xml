@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>4.0.6</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>br.senac.tads.dsw</groupId>
+	<artifactId>projeto</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>projeto</name>
+	<description>Projeto final de Desenvolvimento de Sistemas WEB </description>
+
+	<developers>
+		<developer>
+			<id>lucasvg90</id>
+			<name>Lucas de Sousa Moura</name>
+			<email>lucastomsaw@gmail.com</email>
+		</developer>
+		<developer>
+			<id>PauloHenriqueCandidodaSilva</id>
+			<name>Paulo Henrique Candido da Silva</name>
+			<email>paullo.candidosilva@gmail.com</email>
+		</developer>
+	</developers>
+	<!-- Versão do TADS Spring Initializr: 1.1.6 -->
+	<!-- hash-identificacao: 0cb26bd0ae3ef9790b07886f3d9562a5b89c1cb5f778708932ca0117ae5b3a77 -->
+
+	<properties>
+		<java.version>21</java.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
