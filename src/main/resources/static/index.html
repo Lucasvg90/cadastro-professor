@@ -94,6 +94,7 @@
           <button id="btnCadastrar">Cadastrar Professor</button>
         </a>
       </div>
+      <p id="mensagemErro" class="error"></p>
 
       <table>
         <thead>
@@ -122,40 +123,6 @@
       Criado a partir do Claude Code e Github Copilot
     </footer>
     <script>
-      async function listarPessoas() {
-        try {
-          const httpResp = await fetch("/pessoas");
-          if (!httpResp.ok) {
-            throw new Error("Erro HTTP " + httpResp.status);
-          }
-          const dados = await httpResp.json();
-          const tbodyEl = document.getElementById("resultadoLista");
-          for (const p of dados) {
-            tbodyEl.insertAdjacentHTML(
-              "beforeend",
-              `<tr>
-            <td>${p.id}</td>
-            <td>${p.nome}</td>
-            <td>${p.username}</td>
-            <td>E-mail: ${p.email}</td>
-          </tr>`,
-            );
-          }
-
-          document.getElementById("nome").textContent = dados.nome;
-          document.getElementById("id").textContent = dados.id;
-          document.getElementById("username").textContent = dados.username;
-          document.getElementById("email").textContent = dados.email;
-          document.getElementById("dataNascimento").textContent =
-            dados.dataNascimento;
-        } catch (err) {
-          alert("Erro na requisição:\n" + err.message);
-        }
-      }
-      document.getElementById("btnListar").onclick = async (evt) => {
-        listarPessoas();
-      };
-
       async function listarProfessores() {
         const mensagem = document.getElementById("mensagemErro");
         mensagem.textContent = "";
