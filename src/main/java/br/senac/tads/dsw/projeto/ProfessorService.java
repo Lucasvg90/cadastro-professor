@@ -1,5 +1,7 @@
-package br.senac.tads.dsw.ado2;
+package br.senac.tads.dsw.projeto;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,6 +17,10 @@ public class ProfessorService {
     
     public Optional<Professor> obterPorId(int id){
         return Optional.ofNullable(mapProfessores.get(id));
+    }
+
+    public List<Professor> obterTodos() {
+        return new ArrayList<>(mapProfessores.values());
     }
 
     public Professor incluir(Professor professor){

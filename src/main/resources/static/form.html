@@ -3,243 +3,159 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cadastro de Pessoas</title>
+    <title>Cadastro de Professor</title>
     <style>
       body {
         font-family: sans-serif;
-        max-width: 500px;
+        max-width: 520px;
         margin: 20px auto;
         padding: 0 20px;
       }
       .campo {
-        margin-bottom: 15px;
+        margin-bottom: 16px;
       }
-      label, legend {
+      label {
         display: block;
         font-weight: bold;
-        margin-bottom: 5px;
+        margin-bottom: 6px;
       }
       input[type="text"],
-      input[type="email"],
-      input[type="tel"],
-      input[type="date"],
-      input[type="password"] {
+      select {
         width: 100%;
         padding: 8px;
         box-sizing: border-box;
       }
-      .error-msg {
-        color: red;
-        font-size: 0.85em;
-        margin: 5px 0 0 0;
-        min-height: 1em;
-      }
-      fieldset {
-        border: none;
-      }
-      .checkbox-group {
-        border: 1px solid #ccc;
-        padding: 10px;
-        border-radius: 4px;
-      }
-      .checkbox-item {
+      .checkbox-inline {
         display: flex;
         align-items: center;
-        gap: 8px;
-        margin-bottom: 5px;
+        gap: 10px;
+      }
+      .error-msg {
+        color: red;
+        font-size: 0.9rem;
+        margin-top: 4px;
+        min-height: 1em;
       }
       button {
         background-color: #007bff;
-        color: white;
+        color: #fff;
         border: none;
-        padding: 10px 15px;
+        padding: 10px 16px;
         cursor: pointer;
+        border-radius: 4px;
       }
       button:hover {
         background-color: #0056b3;
       }
+      .site-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #1e2d1e;
+        color: #7a9a7a;
+        font-size: 0.75rem;
+        text-align: center;
+        padding: 0.6rem 1rem;
+        border-top: 1px solid #2e4a2e;
+      }
+      .site-footer a {
+        color: #6db33f;
+        text-decoration: none;
+      }
+      .site-footer a:hover {
+        text-decoration: underline;
+      }
     </style>
   </head>
   <body>
-    <h2>Cadastro de Pessoa</h2>
-    <form id="pessoaForm" novalidate>
+    <h1>Cadastro de Professor</h1>
+    <form id="professorForm" novalidate>
       <div class="campo">
-        <label for="nome">Nome Completo:</label>
-        <input type="text" id="nome" name="nome"
-          required maxlength="100" />
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required maxlength="100" />
         <p id="err-nome" class="error-msg"></p>
       </div>
 
       <div class="campo">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username"
-          required maxlength="64" />
-        <p id="err-username" class="error-msg"></p>
+        <label for="matricula">Matrícula:</label>
+        <input type="text" id="matricula" name="matricula" required maxlength="20" />
+        <p id="err-matricula" class="error-msg"></p>
       </div>
 
       <div class="campo">
-        <label for="email">E-mail:</label>
-        <input type="email" id="email" name="email"
-          required maxlength="100" />
-        <p id="err-email" class="error-msg"></p>
+        <label for="disciplina">Disciplina:</label>
+        <input type="text" id="disciplina" name="disciplina" required maxlength="50" />
+        <p id="err-disciplina" class="error-msg"></p>
       </div>
 
-      <div class="campo">
-        <label for="telefone">Telefone:</label>
-        <input type="text" id="telefone" name="telefone"
-          maxlength="20" />
-        <p id="err-telefone" class="error-msg"></p>
+      <div class="campo checkbox-inline">
+        <input type="checkbox" id="ativo" name="ativo" />
+        <label for="ativo">Ativo</label>
       </div>
 
-      <div class="campo">
-        <label for="dataNascimento">Data de Nascimento:</label>
-        <input type="date" id="dataNascimento" name="dataNascimento"
-          required maxlength="10" max="2026-04-07" />
-        <p id="err-dataNascimento" class="error-msg"></p>
-      </div>
-
-      <div class="campo">
-        <label for="senha">Senha:</label>
-        <input type="password" id="senha" name="senha"
-          required />
-        <p id="err-senha" class="error-msg"></p>
-      </div>
-
-      <div class="campo">
-        <label for="senhaRepeticao">Repetir Senha:</label>
-        <input type="password" id="senhaRepeticao" name="senhaRepeticao"
-          required />
-        <p id="err-senhaRepeticao" class="error-msg"></p>
-      </div>
-
-      <div class="campo checkbox-group">
-        <fieldset>
-          <legend>Conhecimentos:</legend>
-
-            <div class="checkbox-item">
-              <input type="checkbox"
-                name="conhecimentos" value="Java"
-                id="conhecimentos_Java" />
-              <label for="conhecimentos_Java">Java</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox"
-                name="conhecimentos" value="Spring Boot"
-                id="conhecimentos_SpringBoot" />
-              <label for="conhecimentos_SpringBoot">Spring Boot</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox"
-                name="conhecimentos" value="JavaScript"
-                id="conhecimentos_JavaScript" />
-              <label for="conhecimentos_JavaScript">JavaScript</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox"
-                name="conhecimentos" value="Angular"
-                id="conhecimentos_Angular" />
-              <label for="conhecimentos_Angular">Angular</label>
-            </div>
-            <div class="checkbox-item">
-              <input type="checkbox"
-                name="conhecimentos" value="React"
-                id="conhecimentos_React" />
-              <label for="conhecimentos_React">React</label>
-            </div>
-          <p id="err-conhecimentos" class="error-msg"></p>
-          </fieldset>
-      </div>
-      <button type="submit">Cadastrar Pessoa</button>
+      <button type="submit">Cadastrar Professor</button>
     </form>
 
+    <footer class="site-footer">
+      Gerado pelo
+      <a
+        href="https://ftsuda-senac.github.io/tads-spring-initializr/"
+        target="_blank"
+        rel="noopener noreferrer"
+        >TADS Spring Initializr</a
+      >
+      — v1.1.6 <br />Lucas de Sousa Moura / Paulo Henrique Candido da Silva -
+      3TADSNA - 2026<br />
+      Criado a partir do Claude Code e Github Copilot
+    </footer>
+
     <script>
-      // Lógica para limitar a data de nascimento ao dia atual
-      const dataLocal = new Date();
-      const ano = dataLocal.getFullYear();
-      // O mês começa em 0, por isso somamos 1. O padStart garante o formato '01' em vez de '1'
-      const mes = String(dataLocal.getMonth() + 1).padStart(2, "0");
-      const dia = String(dataLocal.getDate()).padStart(2, "0");
+      document.getElementById('professorForm').addEventListener('submit', async (evt) => {
+        evt.preventDefault();
+        limparErros();
 
-      const hojeLocal = `${ano}-${mes}-${dia}`;
+        const formEl = evt.target;
+        const dados = {
+          nome: formEl.nome.value.trim(),
+          matricula: formEl.matricula.value.trim(),
+          disciplina: formEl.disciplina.value.trim(),
+          ativo: formEl.ativo.checked
+        };
 
-      // Agora o 'max' será exatamente o dia de hoje no fuso do usuário
-      document.getElementById("dataNascimento").setAttribute("max", hojeLocal);
+        try {
+          const response = await fetch('/api/professores', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados)
+          });
 
-      document
-        .getElementById("pessoaForm")
-        .addEventListener("submit", async (evt) => {
-          evt.preventDefault();
-          limparErros();
-
-          const formEl = evt.target; // equivale a document.getElementById('pessoaForm')
-
-          // Tratamento especial para checkboxes (converte em array)
-          // Versão comentada abaixo é reduzida usando FormData e Object.fromEntries
-          /*
-            const formData = new FormData(formEl);
-            const conhecimentos = Array.from(formData.getAll('conhecimentos'));
-            const dados = Object.fromEntries(formData.entries());
-            dados.conhecimentos = conhecimentos; // Substitui o valor único pelo array
-            */
-
-          const conhecimentos = [];
-          const opcoesConhecimentos = document.querySelectorAll(
-            '[name="conhecimentos"]:checked',
-          );
-          for (const opcao of opcoesConhecimentos) {
-            conhecimentos.push(opcao.value);
-          }
-
-          const dados = {
-            nome: formEl.nome.value, // OU formEl.elements['nome'].value
-            username: formEl.username.value,
-            email: formEl.email.value,
-            telefone: formEl.telefone.value,
-            dataNascimento: formEl.dataNascimento.value,
-            senha: formEl.senha.value,
-            senhaRepeticao: formEl.senhaRepeticao.value,
-            conhecimentos: conhecimentos,
-          };
-
-          console.log("****** JSON gerado: " + JSON.stringify(dados));
-
-          try {
-            const response = await fetch("http://localhost:8080/pessoas/validacao", {
-              method: "POST",
-              headers: { "content-type": "application/json" },
-              body: JSON.stringify(dados),
-            });
-
-            if (!response.ok) {
-              const dadosErros = await response.json();
-              if (dadosErros) {
-                // Ver no console a estrutura do JSON retornada
-                // Para erros de validação
-                exibirErros(dadosErros.errors);
-                //alert('ERRO - Status: ' + response.status)
-              } else {
-                alert('ERRO - Status: ' + response.status)
-              }
-              return;
+          if (!response.ok) {
+            const payload = await response.json();
+            if (payload && payload.errors) {
+              exibirErros(payload.errors);
+            } else {
+              alert('Erro ao cadastrar professor. Status: ' + response.status);
             }
-            alert("Cadastro realizado com sucesso!");
-            formEl.reset();
-          } catch (error) {
-            console.error("Erro na conexão: ", error);
-            alert("Não foi possível conectar ao servidor.");
+            return;
           }
-        });
+
+          alert('Professor cadastrado com sucesso!');
+          formEl.reset();
+        } catch (error) {
+          console.error('Erro na conexão:', error);
+          alert('Não foi possível conectar ao servidor.');
+        }
+      });
 
       function limparErros() {
-        document
-          .querySelectorAll(".error-msg")
-          .forEach((p) => (p.textContent = ""));
+        document.querySelectorAll('.error-msg').forEach((el) => {
+          el.textContent = '';
+        });
       }
 
       function exibirErros(erros) {
-        if (!erros) return;
-        // Assume que o backend retorna os erros do Bean validation. Abaixo segue os campos relevantes
-        // Ex: erros: [{ "field": "email", "defaultMessage": "E-mail inválido" }, {"field": "nome", "defaultMessage": "Não deve ser em branco" }]
+        if (!Array.isArray(erros)) return;
         for (const erro of erros) {
           const elementoErro = document.getElementById(`err-${erro.field}`);
           if (elementoErro) {
@@ -248,5 +164,7 @@
         }
       }
     </script>
+  </body>
+</html>
   </body>
 </html>
