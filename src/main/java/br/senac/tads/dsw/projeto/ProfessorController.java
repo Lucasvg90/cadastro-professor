@@ -2,7 +2,6 @@ package br.senac.tads.dsw.projeto;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -29,8 +29,6 @@
         cursor: pointer;
         border-radius: 4px;
       }
-      .btnCadastrar {
-      }
       button:hover {
         background: #163a5a;
       }
@@ -77,6 +75,74 @@
         gap: 16px;
         margin-top: 0.75rem;
       }
+      .botoes-tabela {
+        display: flex;
+        gap: 8px;
+      }
+      button.editar {
+        background: #1976d2;
+        padding: 6px 12px;
+        font-size: 0.9rem;
+      }
+      button.editar:hover {
+        background: #1565c0;
+      }
+      button.excluir {
+        background: #d32f2f;
+        padding: 6px 12px;
+        font-size: 0.9rem;
+      }
+      button.excluir:hover {
+        background: #c62828;
+      }
+      .success {
+        color: #2e7d32;
+        background: #e8f5e9;
+        padding: 12px;
+        border-radius: 4px;
+        margin-top: 0.75rem;
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.4);
+      }
+      .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 300px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      }
+      .modal-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: 20px;
+      }
+      .modal-buttons button {
+        padding: 8px 16px;
+        cursor: pointer;
+      }
+      .modal-buttons button.cancelar {
+        background: #757575;
+      }
+      .modal-buttons button.cancelar:hover {
+        background: #616161;
+      }
+      .modal-buttons button.confirmar {
+        background: #d32f2f;
+      }
+      .modal-buttons button.confirmar:hover {
+        background: #c62828;
+      }
       
     </style>
   </head>
@@ -96,19 +162,32 @@
       </div>
       <p id="mensagemErro" class="error"></p>
 
+      <p id="mensagemSucesso" class="success" style="display: none;"></p>
+
       <table>
         <thead>
           <tr>
-            <th>ID</th>
+             <th>ID</th>
             <th>Nome</th>
             <th>Matrícula</th>
             <th>Disciplina</th>
             <th>Ativo</th>
+            <th>Ações</th>
           </tr>
         </thead>
         <tbody id="resultadoLista"></tbody>
       </table>
     </section>
+
+    <div id="modalConfirmacao" class="modal">
+      <div class="modal-content">
+        <p>Deseja realmente excluir este professor?</p>
+        <div class="modal-buttons">
+          <button class="cancelar" onclick="fecharModal()">Cancelar</button>
+          <button class="confirmar" onclick="confirmarExclusao()">Sim, excluir</button>
+        </div>
+      </div>
+    </div>
 
     <footer class="site-footer">
       Gerado pelo
@@ -123,9 +202,13 @@
       Criado a partir do Claude Code e Github Copilot
     </footer>
     <script>
+      let idParaExcluir = null;
+
       async function listarProfessores() {
         const mensagem = document.getElementById("mensagemErro");
+        const mensagemSucesso = document.getElementById("mensagemSucesso");
         mensagem.textContent = "";
+        mensagemSucesso.style.display = "none";
         const tbodyEl = document.getElementById("resultadoLista");
         tbodyEl.innerHTML = "";
 
@@ -137,7 +220,7 @@
           const dados = await response.json();
           if (!Array.isArray(dados) || dados.length === 0) {
             tbodyEl.innerHTML =
-              '<tr><td colspan="5">Nenhum professor cadastrado.</td></tr>';
+              '<tr><td colspan="6">Nenhum professor cadastrado.</td></tr>';
             return;
           }
 
@@ -145,12 +228,18 @@
             tbodyEl.insertAdjacentHTML(
               "beforeend",
               `<tr>
-            <td>${p.id}</td>
-            <td>${p.nome}</td>
-            <td>${p.matricula}</td>
-            <td>${p.disciplina}</td>
-            <td>${p.ativo ? "Sim" : "Não"}</td>
-          </tr>`,
+              <td>${p.id}</td>
+              <td>${p.nome}</td>
+              <td>${p.matricula}</td>
+              <td>${p.disciplina}</td>
+              <td>${p.ativo ? "Sim" : "Não"}</td>
+              <td>
+                <div class="botoes-tabela">
+                  <button class="editar" onclick="editarProfessor(${p.id})">Editar</button>
+                  <button class="excluir" onclick="abrirModalExclusao(${p.id})">Excluir</button>
+                </div>
+              </td>
+            </tr>`,
             );
           }
         } catch (err) {
@@ -159,10 +248,106 @@
         }
       }
 
+      function editarProfessor(id) {
+        window.location.href = `form.html?id=${id}`;
+      }
+
+      function abrirModalExclusao(id) {
+        idParaExcluir = id;
+        document.getElementById("modalConfirmacao").style.display = "block";
+      }
+
+      function fecharModal() {
+        document.getElementById("modalConfirmacao").style.display = "none";
+        idParaExcluir = null;
+      }
+
+      async function confirmarExclusao() {
+        if (idParaExcluir === null) return;
+
+        try {
+          const response = await fetch(`/api/professores/${idParaExcluir}`, {
+            method: "DELETE"
+          });
+
+          if (!response.ok) {
+            let tipoErro = '';
+            
+            // Determinar tipo de erro baseado no status HTTP
+            if (response.status >= 400 && response.status < 500) {
+              tipoErro = 'Erro do Cliente (4XX)';
+            } else if (response.status >= 500 && response.status < 600) {
+              tipoErro = 'Erro do Servidor (5XX)';
+            } else if (response.status >= 300 && response.status < 400) {
+              tipoErro = 'Redirecionamento (3XX)';
+            } else {
+              tipoErro = 'Erro HTTP';
+            }
+            
+            let mensagemErro = `${tipoErro} - Status ${response.status}`;
+            
+            try {
+              const payload = await response.json();
+              if (payload && payload.message) {
+                mensagemErro += `:\n${payload.message}`;
+              }
+            } catch {
+              // Se não conseguir parsear JSON, mantém a mensagem anterior
+            }
+            
+            throw new Error(mensagemErro);
+          }
+
+          fecharModal();
+          
+          // Mostrar mensagem de sucesso
+          const mensagemSucesso = document.getElementById("mensagemSucesso");
+          mensagemSucesso.textContent = "Professor excluído com sucesso!";
+          mensagemSucesso.style.display = "block";
+
+          // Recarregar a lista
+          await listarProfessores();
+
+          // Ocultar mensagem após 4 segundos
+          setTimeout(() => {
+            mensagemSucesso.style.display = "none";
+          }, 4000);
+        } catch (err) {
+          fecharModal();
+          alert("Erro ao excluir professor: " + err.message);
+        }
+      }
+
+      // Fechar modal ao clicar fora dele
+      window.onclick = function(event) {
+        const modal = document.getElementById("modalConfirmacao");
+        if (event.target == modal) {
+          fecharModal();
+        }
+      }
+
       document
         .getElementById("btnListar")
         .addEventListener("click", listarProfessores);
-      window.addEventListener("DOMContentLoaded", listarProfessores);
+      window.addEventListener("DOMContentLoaded", () => {
+        listarProfessores();
+        // Verificar se há parâmetro de sucesso na URL
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('sucesso') === 'true') {
+          const mensagemSucesso = document.getElementById("mensagemSucesso");
+          const tipoOperacao = params.get('operacao') || 'cadastrado';
+          mensagemSucesso.textContent = `Professor ${tipoOperacao} com sucesso!`;
+          mensagemSucesso.style.display = "block";
+          
+          // Limpar a URL
+          window.history.replaceState({}, document.title, window.location.pathname);
+
+          // Ocultar mensagem após 4 segundos
+          setTimeout(() => {
+            mensagemSucesso.style.display = "none";
+          }, 4000);
+        }
+      });
     </script>
   </body>
 </html>

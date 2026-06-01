@@ -47,6 +47,25 @@
       button:hover {
         background-color: #0056b3;
       }
+      .botoes-form {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      button.cancelar {
+        background-color: #6c757d;
+      }
+      button.cancelar:hover {
+        background-color: #5a6268;
+      }
+      .success-msg {
+        color: #2e7d32;
+        background: #e8f5e9;
+        padding: 12px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        display: none;
+      }
       .site-footer {
         position: fixed;
         bottom: 0;
@@ -69,8 +88,10 @@
     </style>
   </head>
   <body>
-    <h1>Cadastro de Professor</h1>
+    <h1 id="titulo">Cadastro de Professor</h1>
+    
     <form id="professorForm" novalidate>
+      <input type="hidden" id="id" name="id" />
       <div class="campo">
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" required maxlength="100" />
@@ -79,7 +100,7 @@
 
       <div class="campo">
         <label for="matricula">Matrícula:</label>
-        <input type="text" id="matricula" name="matricula" required maxlength="20" />
+        <input type="text" id="matricula" name="matricula" required maxlength="20" placeholder="SNC-123456"/>
         <p id="err-matricula" class="error-msg"></p>
       </div>
 
@@ -94,7 +115,10 @@
         <label for="ativo">Ativo</label>
       </div>
 
-      <button type="submit">Cadastrar Professor</button>
+      <div class="botoes-form">
+        <button type="submit" id="btnSubmit">Cadastrar Professor</button>
+        <button type="button" class="cancelar" onclick="voltarParaLista()">Cancelar</button>
+      </div>
     </form>
 
     <footer class="site-footer">
@@ -111,11 +135,52 @@
     </footer>
 
     <script>
+      let modoEdicao = false;
+
+      // Carregar dados do professor se em modo edição
+      async function carregarDadosProfessor(id) {
+        try {
+          const response = await fetch(`/api/professores/${id}`);
+          if (!response.ok) {
+            throw new Error("Professor não encontrado");
+          }
+          const professor = await response.json();
+          
+          document.getElementById('id').value = professor.id;
+          document.getElementById('nome').value = professor.nome;
+          document.getElementById('matricula').value = professor.matricula;
+          document.getElementById('disciplina').value = professor.disciplina;
+          document.getElementById('ativo').checked = professor.ativo;
+          
+          document.getElementById('titulo').textContent = 'Editar Professor';
+          document.getElementById('btnSubmit').textContent = 'Atualizar Professor';
+          modoEdicao = true;
+        } catch (error) {
+          alert('Erro ao carregar dados do professor: ' + error.message);
+          window.location.href = 'index.html';
+        }
+      }
+
+      // Verificar se há ID na URL
+      window.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+        if (id) {
+          carregarDadosProfessor(parseInt(id));
+        }
+      });
+
+      function voltarParaLista() {
+        window.location.href = 'index.html';
+      }
+
       document.getElementById('professorForm').addEventListener('submit', async (evt) => {
         evt.preventDefault();
         limparErros();
 
         const formEl = evt.target;
+        const id = document.getElementById('id').value;
+        
         const dados = {
           nome: formEl.nome.value.trim(),
           matricula: formEl.matricula.value.trim(),
@@ -124,27 +189,53 @@
         };
 
         try {
-          const response = await fetch('/api/professores', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dados)
-          });
+          let response;
+          let mensagemOperacao = 'cadastrado';
+          
+          if (modoEdicao && id) {
+            // Edição (PUT)
+            response = await fetch(`/api/professores/${id}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(dados)
+            });
+            mensagemOperacao = 'atualizado';
+          } else {
+            // Cadastro (POST)
+            response = await fetch('/api/professores', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(dados)
+            });
+          }
 
           if (!response.ok) {
-            const payload = await response.json();
-            if (payload && payload.errors) {
-              exibirErros(payload.errors);
-            } else {
-              alert('Erro ao cadastrar professor. Status: ' + response.status);
+            let mensagemErro = '';
+            try {
+              const payload = await response.json();
+              if (payload && payload.errors) {
+                exibirErros(payload.errors);
+                mensagemErro = `Erro ${response.status} - Há campos vazios e/ou preenchidos incorretamente`;
+              } else if (payload && payload.message) {
+                mensagemErro = `Erro ${response.status} - ${payload.message}`;
+              } else if (payload && payload.error) {
+                mensagemErro = `Erro ${response.status} - ${payload.error}`;
+              } else {
+                mensagemErro = `Erro ${response.status} - ${response.statusText || 'Ocorreu um erro'}`;
+              }
+            } catch {
+              mensagemErro = `Erro ${response.status} - ${response.statusText || 'Ocorreu um erro'}`;
             }
+
+            alert(mensagemErro);
             return;
           }
 
-          alert('Professor cadastrado com sucesso!');
-          formEl.reset();
+          // Redirecionar com mensagem de sucesso
+          window.location.href = `index.html?sucesso=true&operacao=${mensagemOperacao}`;
         } catch (error) {
           console.error('Erro na conexão:', error);
-          alert('Não foi possível conectar ao servidor.');
+          alert('Erro na conexão com o servidor: ' + error.message);
         }
       });
 
@@ -164,7 +255,5 @@
         }
       }
     </script>
-  </body>
-</html>
   </body>
 </html>
