@@ -10,7 +10,7 @@ public class Professor {
     @NotBlank @Size(min = 5, max = 100)
     private String nome;
     
-    @NotBlank @Size(max = 9)
+    @NotBlank @Size(min = 9, max = 9)
     private String matricula;
     
     @NotBlank @Size(min = 5, max = 50)

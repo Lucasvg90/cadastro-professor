@@ -6,10 +6,57 @@
     <title>Cadastro de Professor</title>
     <style>
       body {
-        font-family: sans-serif;
-        max-width: 520px;
-        margin: 20px auto;
-        padding: 0 20px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #eef3fb;
+        color: #172d4c;
+        margin: 0;
+        padding: 0;
+      }
+      .page-wrapper {
+        max-width: 640px;
+        margin: 24px auto 80px;
+        padding: 0 16px;
+        position: relative;
+      }
+      .hero-block {
+        position: relative;
+        background: linear-gradient(135deg, #e8f5e9 0%, #f1f8f6 100%);
+        border-radius: 28px;
+        padding: 32px 28px;
+        box-shadow: 0 18px 40px rgba(24, 71, 154, 0.12);
+        overflow: hidden;
+        margin-bottom: 120px;
+      }
+      .hero-block::before {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        border-radius: 32px;
+        background: rgba(76, 175, 80, 0.14);
+        right: -40px;
+        top: -40px;
+      }
+      .hero-block h1 {
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+        color: #1b3b7b;
+        font-size: 2.1rem;
+        text-align:center;
+      }
+      .hero-block p {
+        margin: 0.6rem 0;
+        line-height: 1.7;
+        color: #334665;
+      }
+      .form-card {
+        position: relative;
+        z-index: 1;
+        background: #ffffff;
+        border-radius: 24px;
+        padding: 28px 24px;
+        box-shadow: 0 22px 42px rgba(20, 50, 96, 0.12);
+        margin-top: -90px;
       }
       .campo {
         margin-bottom: 16px;
@@ -22,13 +69,18 @@
       input[type="text"],
       select {
         width: 100%;
-        padding: 8px;
+        padding: 12px 14px;
         box-sizing: border-box;
+        border: 1px solid #d4dae8;
+        border-radius: 10px;
+        background: #fff;
+        color: #1f2f4b;
       }
       .checkbox-inline {
         display: flex;
         align-items: center;
         gap: 10px;
+        justify-content: center;
       }
       .error-msg {
         color: red;
@@ -37,12 +89,13 @@
         min-height: 1em;
       }
       button {
-        background-color: #007bff;
+        background-color: #1d5edd;
         color: #fff;
         border: none;
-        padding: 10px 16px;
+        padding: 12px 18px;
         cursor: pointer;
-        border-radius: 4px;
+        border-radius: 10px;
+        font-weight: 600;
       }
       button:hover {
         background-color: #0056b3;
@@ -51,6 +104,7 @@
         display: flex;
         gap: 10px;
         margin-top: 20px;
+        justify-content: center;
       }
       button.cancelar {
         background-color: #6c757d;
@@ -88,10 +142,15 @@
     </style>
   </head>
   <body>
-    <h1 id="titulo">Cadastro de Professor</h1>
-    
-    <form id="professorForm" novalidate>
-      <input type="hidden" id="id" name="id" />
+    <div class="page-wrapper">
+      <div class="hero-block">
+        <h1 id="titulo">Cadastro de Professor</h1>
+        <p>Use este formulário para cadastrar um novo professor ou atualizar os dados existentes.</p>
+      </div>
+
+      <div class="form-card">
+        <form id="professorForm" novalidate>
+          <input type="hidden" id="id" name="id" />
       <div class="campo">
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome" required maxlength="100" />
@@ -100,7 +159,7 @@
 
       <div class="campo">
         <label for="matricula">Matrícula:</label>
-        <input type="text" id="matricula" name="matricula" required maxlength="20" placeholder="SNC-123456"/>
+        <input type="text" id="matricula" name="matricula" required maxlength="20" placeholder="SNC-12345"/>
         <p id="err-matricula" class="error-msg"></p>
       </div>
 
@@ -120,6 +179,8 @@
         <button type="button" class="cancelar" onclick="voltarParaLista()">Cancelar</button>
       </div>
     </form>
+      </div>
+    </div>
 
     <footer class="site-footer">
       Gerado pelo

@@ -91,6 +91,7 @@
         background: #d32f2f;
         padding: 6px 12px;
         font-size: 0.9rem;
+        margin-left: 10%;
       }
       button.excluir:hover {
         background: #c62828;
@@ -206,9 +207,7 @@
 
       async function listarProfessores() {
         const mensagem = document.getElementById("mensagemErro");
-        const mensagemSucesso = document.getElementById("mensagemSucesso");
         mensagem.textContent = "";
-        mensagemSucesso.style.display = "none";
         const tbodyEl = document.getElementById("resultadoLista");
         tbodyEl.innerHTML = "";
 
