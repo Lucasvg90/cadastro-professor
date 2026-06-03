@@ -21,6 +21,7 @@ public class ProfessorRepository {
         professor.setMatricula(rs.getString("matricula"));
         professor.setDisciplina(rs.getString("disciplina"));
         professor.setAtivo(rs.getBoolean("ativo"));
+        professor.setObservacoes(rs.getString("observacoes"));
         return professor;
     };
 
@@ -32,18 +33,18 @@ public class ProfessorRepository {
 
     public List<Professor> findAll() {
         return jdbcTemplate.query(
-                "SELECT id, nome, matricula, disciplina, ativo FROM PROFESSORES ORDER BY id",
+                "SELECT id, nome, matricula, disciplina, observacoes, ativo FROM PROFESSORES ORDER BY id",
                 PROFESSOR_ROW_MAPPER);
     }
 
     public Optional<Professor> findById(int id) {
         return jdbcTemplate.query(
-                "SELECT id, nome, matricula, disciplina, ativo FROM PROFESSORES WHERE id = ?",
+                "SELECT id, nome, matricula, disciplina, observacoes, ativo FROM PROFESSORES WHERE id = ?",
                 PROFESSOR_ROW_MAPPER, id).stream().findFirst();
     }
 
     public Professor save(Professor professor) {
-        String sql = "INSERT INTO PROFESSORES (nome, matricula, disciplina, ativo) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO PROFESSORES (nome, matricula, disciplina, observacoes, ativo) VALUES (?, ?, ?, ?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
         jdbcTemplate.update(connection -> {
@@ -51,7 +52,8 @@ public class ProfessorRepository {
             ps.setString(1, professor.getNome());
             ps.setString(2, professor.getMatricula());
             ps.setString(3, professor.getDisciplina());
-            ps.setBoolean(4, professor.isAtivo());
+            ps.setString(4, professor.getObservacoes());
+            ps.setBoolean(5, professor.isAtivo());
             return ps;
         }, keyHolder);
 
@@ -65,10 +67,11 @@ public class ProfessorRepository {
 
     public Professor update(Professor professor) {
         jdbcTemplate.update(
-                "UPDATE PROFESSORES SET nome = ?, matricula = ?, disciplina = ?, ativo = ? WHERE id = ?",
+                "UPDATE PROFESSORES SET nome = ?, matricula = ?, disciplina = ?, observacoes = ?, ativo = ? WHERE id = ?",
                 professor.getNome(),
                 professor.getMatricula(),
                 professor.getDisciplina(),
+                professor.getObservacoes(),
                 professor.isAtivo(),
                 professor.getId());
         return professor;

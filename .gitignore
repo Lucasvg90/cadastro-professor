@@ -40,3 +40,6 @@ build/
 .env
 .env.*
 !.env.example
+
+### Banco de dados H2 local ###
+data/

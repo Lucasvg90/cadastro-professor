@@ -16,17 +16,29 @@ public class Professor {
     @NotBlank @Size(min = 5, max = 50)
     private String disciplina;
 
+    @NotBlank @Size(min = 5, max = 100)
+    private String observacoes;
+
     private boolean ativo;
 
     public Professor() {
     }
 
-    public Professor(Integer id, String nome, String matricula, String disciplina, boolean ativo) {
+    public Professor(Integer id, String nome, String matricula, String disciplina, boolean ativo, String observacoes) {
         this.id = id;
         this.nome = nome;
         this.matricula = matricula;
         this.disciplina = disciplina;
         this.ativo = ativo;
+        this.observacoes = observacoes;
+    }
+
+    public String getObservacoes() {
+        return observacoes;
+    }
+
+    public void setObservacoes(String observacoes) {
+        this.observacoes = observacoes;
     }
 
     public int getId() {
