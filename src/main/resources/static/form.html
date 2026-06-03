@@ -169,6 +169,12 @@
         <p id="err-disciplina" class="error-msg"></p>
       </div>
 
+      <div class="campo">
+        <label for="observacao">Observações:</label>
+        <textarea id="observacao" name="observacao" maxlength="200" rows="5" style="width:100%; padding:12px 14px; box-sizing:border-box; border-radius:10px; border:1px solid #d4dae8;"></textarea>
+        <p id="err-observacao" class="error-msg"></p>
+      </div>
+
       <div class="campo checkbox-inline">
         <input type="checkbox" id="ativo" name="ativo" />
         <label for="ativo">Ativo</label>
@@ -211,6 +217,7 @@
           document.getElementById('nome').value = professor.nome;
           document.getElementById('matricula').value = professor.matricula;
           document.getElementById('disciplina').value = professor.disciplina;
+          document.getElementById('observacao').value = professor.observacao || '';
           document.getElementById('ativo').checked = professor.ativo;
           
           document.getElementById('titulo').textContent = 'Editar Professor';
@@ -246,6 +253,7 @@
           nome: formEl.nome.value.trim(),
           matricula: formEl.matricula.value.trim(),
           disciplina: formEl.disciplina.value.trim(),
+          observacao: formEl.observacao.value.trim(),
           ativo: formEl.ativo.checked
         };
 
